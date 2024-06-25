@@ -1392,6 +1392,9 @@ defmodule DBConnection do
         stop(conn, kind, reason, stack)
         {kind, reason, stack, meter}
 
+        {0, {Tds.Protocol, {:disconnect, err, _tds_protocol}, _}} ->
+          disconnect(conn, err.message)
+          {:error, err, meter}
       other ->
         bad_return!(other, conn, meter)
     end
